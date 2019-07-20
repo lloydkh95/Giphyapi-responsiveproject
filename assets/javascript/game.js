@@ -21,18 +21,23 @@ $("#submit").on("click", function(event){
     event.preventDefault();
     var inputSearch = $("#addition").val().trim();
     console.log(inputSearch);
-    var newButton = $("<button>").addClass("giphy").text(inputSearch)
+    var newButton = $("<button>")
+        .attr("data-animal", inputSearch)
+        .addClass("giphy")
+        .text(inputSearch)
     $("#buttons-view").append(newButton)
     // renderButtons();
 });
 // event listener for all button elements
+
 $("#buttons-view").on("click", ".giphy", function(){
     console.log('this was clicked');
 // use the "this" keyword to refer to the button that is being clicked
 var animal = $(this).attr("data-animal");
 // constructin a url to search the giphy for pics of the animal  
-var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + 'cat' + "&api_key=yjLJ51Tj4RsWu0DlX1Y6vsfOCaD9RpYK"
+var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=10"
 // performing ajax get request
+console.log(queryURL);
 $.ajax({
     url: queryURL,
     method: "GET"
@@ -42,8 +47,7 @@ $.ajax({
 console.log(response.data);
 var results = response.data;
 // looping over every result item
-for (var// After the data comes back from the api
- i = 0; i < results.length; i++) {
+for (var i = 0; i < results.length; i++) {
 // only taking action if the photo has an appropriate rating
 if (results[i].rating !== "r" && results[i].rating !== "pg-13"){
 // creating a div for the gif
@@ -58,7 +62,7 @@ var animalImage = $("<img>");
 animalImage.attr("src", results[i].images.fixed_height.url);
 // appending the paragrah and person image
 gifDiv.append(p);
-gifDiv.append(personImage);
+gifDiv.append(animalImage);
 // prepending the gifDiv
 $("#gifs-appear-here").prepend(gifDiv);
 }
